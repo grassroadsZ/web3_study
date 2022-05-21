@@ -1,0 +1,5 @@
+# created by virtualenv automatically
+venv
+node_modules
+.env
+.idea
