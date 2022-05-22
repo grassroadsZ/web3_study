@@ -170,7 +170,7 @@ def zks_bridge(from_address, from_address_private_key, l1_amount):
         'maxFeePerGas': web3_instance.toWei(5, 'gwei'),
         'maxPriorityFeePerGas': web3_instance.toWei(5, 'gwei'),
         'chainId': 5,
-        "type": "0x2", # EIP-1559 特有的参数
+        "type": "0x2", # EIP-1559 特有的参数 https://github.com/ethereum/web3.py/issues/2091
     }
     ZksContractInstance = web3_instance.eth.contract(Web3.toChecksumAddress(ZKS_Contract), abi=Contract_ABI)
     function_instance = ZksContractInstance.functions.depositETH(_amount=web3_instance.toWei(l1_amount, "ether"),
