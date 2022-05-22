@@ -109,8 +109,54 @@ def lesson_03():
     print(f'当前地址余额: {balance} ETH')
 
 
+def bridge_arbitrum(from_address, from_address_private_key, l1_amount):
+    """
+    Arbitrum 测试网跨链桥
+    """
+    ArbitrumProxyContract = "0x578BAde599406A8fE3d24Fd7f7211c0911F5B29e"
+    ArbitrumProxyContractAbi = '[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"messageNum","type":"uint256"},{"indexed":false,"internalType":"bytes","name":"data","type":"bytes"}],"name":"InboxMessageDelivered","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"messageNum","type":"uint256"}],"name":"InboxMessageDeliveredFromOrigin","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"enabled","type":"bool"}],"name":"PauseToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"bool","name":"enabled","type":"bool"}],"name":"RewriteToggled","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"newSource","type":"address"}],"name":"WhitelistSourceUpdated","type":"event"},{"inputs":[],"name":"bridge","outputs":[{"internalType":"contract IBridge","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"uint256","name":"l2CallValue","type":"uint256"},{"internalType":"uint256","name":"maxSubmissionCost","type":"uint256"},{"internalType":"address","name":"excessFeeRefundAddress","type":"address"},{"internalType":"address","name":"callValueRefundAddress","type":"address"},{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"createRetryableTicket","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"uint256","name":"l2CallValue","type":"uint256"},{"internalType":"uint256","name":"maxSubmissionCost","type":"uint256"},{"internalType":"address","name":"excessFeeRefundAddress","type":"address"},{"internalType":"address","name":"callValueRefundAddress","type":"address"},{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"createRetryableTicketNoRefundAliasRewrite","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"maxSubmissionCost","type":"uint256"}],"name":"depositEth","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"contract IBridge","name":"_bridge","type":"address"},{"internalType":"address","name":"_whitelist","type":"address"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"isCreateRetryablePaused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isMaster","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pauseCreateRetryables","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"sendContractTransaction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"sendL1FundedContractTransaction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"sendL1FundedUnsignedTransaction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"bytes","name":"messageData","type":"bytes"}],"name":"sendL2Message","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"messageData","type":"bytes"}],"name":"sendL2MessageFromOrigin","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"sendUnsignedTransaction","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"shouldRewriteSender","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"startRewriteAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"stopRewriteAddress","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpauseCreateRetryables","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"destAddr","type":"address"},{"internalType":"uint256","name":"l2CallValue","type":"uint256"},{"internalType":"uint256","name":"maxSubmissionCost","type":"uint256"},{"internalType":"address","name":"excessFeeRefundAddress","type":"address"},{"internalType":"address","name":"callValueRefundAddress","type":"address"},{"internalType":"uint256","name":"maxGas","type":"uint256"},{"internalType":"uint256","name":"gasPriceBid","type":"uint256"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"unsafeCreateRetryableTicket","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"newSource","type":"address"}],"name":"updateWhitelistSource","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"whitelist","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"}]'
+    web3_instance = connect_web3_instance("rinkeby")
+
+    # 通过合约地址 以及abi 实例化的 对象才可以使用abi中的方法进行调用
+    ArbitrumProxyContractInstance = web3_instance.eth.contract(address=Web3.toChecksumAddress(ArbitrumProxyContract),
+                                                               abi=ArbitrumProxyContractAbi)
+
+    l1_amount = web3_instance.toWei(l1_amount, "ether")
+    from_address_balance = web3_instance.eth.get_balance(web3_instance.toChecksumAddress(from_address))
+    print(f"{from_address} 的 地址余额 为 {float(from_address_balance/1e18)} ETH,转账 {l1_amount/1e18} ETH")
+
+    function_instance = ArbitrumProxyContractInstance.functions.depositEth(maxSubmissionCost=l1_amount)
+
+    params = {
+
+        'gas': 250000,
+        'nonce': web3_instance.eth.getTransactionCount(web3_instance.toChecksumAddress(from_address)),
+        'from': web3_instance.toChecksumAddress(from_address),
+        'value': l1_amount,
+        # 'gasPrice': w3.toWei('5', 'gwei'),
+        'maxFeePerGas': web3_instance.toWei(5, 'gwei'),
+        'maxPriorityFeePerGas': web3_instance.toWei(5, 'gwei'),
+        'chainId': 4,
+
+    }
+    try:
+        # 构建tx
+        tx = function_instance.buildTransaction(params)
+        # 签名
+        sign_tx = web3_instance.eth.account.signTransaction(tx, private_key=from_address_private_key)
+        # 发送交易
+        txn = web3_instance.eth.sendRawTransaction(sign_tx.rawTransaction)
+        from_address_balance = web3_instance.eth.get_balance(web3_instance.toChecksumAddress(from_address))
+        print(f"{from_address} 的 地址余额 为 {float(from_address_balance/1e18)} ETH")
+
+        return {'status': 'succeed', 'txn_hash': web3_instance.toHex(txn), 'task': 'Bridge ETH'}
+
+    except Exception as e:
+        return {'status': 'failed', 'error': e, 'task': 'Bridge ETH'}
 
 
 if __name__ == '__main__':
     # lesson_02()
-    lesson_03()
+    # lesson_03()
+    print(bridge_arbitrum(from_address="0xa997B77dE801f787e14ebCe46eb7c599F6366Fc5",
+                          from_address_private_key=os.getenv('TEST_ACCOUNT_SECRET'), l1_amount=0.2))
